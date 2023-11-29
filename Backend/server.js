@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+// Middleware
+
+
+
+
+
 
 // Creating an app listening and directing to mongoDB
 const urimongoDB = process.env.ATLAS_URI;
