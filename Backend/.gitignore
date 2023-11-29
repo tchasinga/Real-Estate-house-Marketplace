@@ -2,3 +2,9 @@
 .env 
 .env.development
 .env.production
+# Ignore dotenv environment variable files
+.env*
+# Ignore log files
+*.log
+# Ignore yarn.lock file
+yarn.lock
