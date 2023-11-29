@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const signup = async (req, res,  next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password} = req.body;
       // Hashing the password
       const hashedPassword = bycrypt.hashSync(password, 10);
       // Creating a new user
