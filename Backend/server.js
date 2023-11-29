@@ -1,7 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const userRouter = require("./routes/user.route")
+const userRouter = require("./routes/user.route");
+const { signup } = require('./controller/auth.controller');
 
 const app = express();
 
@@ -18,4 +19,5 @@ mongoose
     })
 
 // Adiign api routes
-app.use('/api/', userRouter)
+app.use('/api/test', userRouter)
+app.use('/api/signup', signup)
