@@ -40,4 +40,4 @@ mongoose
 
 // Adiign api routes
 app.use('/api/test', userRouter)
-app.use('/api/auth/signup', authRouter)
+app.use('/api/auth', authRouter);

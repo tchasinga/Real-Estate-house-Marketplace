@@ -16,4 +16,14 @@ const signup = async (req, res,  next) => {
   }
 }
 
-module.exports = { signup }; 
+// Adding get request
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find()
+    res.json(users)
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { signup , getUsers }; 
