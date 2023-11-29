@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const userRouter = require("./routes/user.route.js");
 const authRouter  = require('./routes/auth.route.js');
+const cors = require("cors");
 
 const app = express();
 
@@ -17,6 +18,15 @@ app.use((err, req, res , next) =>{
         message,
     });
 });
+
+// Middleware to parse JSON
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Creating an app listening and directing to mongoDB
 const urimongoDB = process.env.ATLAS_URI;
