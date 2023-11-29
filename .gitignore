@@ -100,9 +100,8 @@ dist
 .temp
 .cache
 
-# add .env
+# dotenv environment variable files
 .env
-
 # Docusaurus cache and generated files
 .docusaurus
 
