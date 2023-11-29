@@ -1,7 +1,8 @@
 const User = require('../model/user.model');
 const bycrypt = require('bcrypt');
+const errorhandler = require('../Utils/error');
 
-const signup = async (req, res) => {
+const signup = async (req, res,  next) => {
   const { username, email, password } = req.body;
       // Hashing the password
       const hashedPassword = bycrypt.hashSync(password, 10);
@@ -11,7 +12,7 @@ const signup = async (req, res) => {
     await newUser.save()
     res.json('User added Successfully!')
   } catch (error) {
-    res.status(400).json(error.message);
+    next(error)
   }
 }
 

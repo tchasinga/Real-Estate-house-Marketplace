@@ -5,8 +5,18 @@ const userRouter = require("./routes/user.route.js");
 const authRouter  = require('./routes/auth.route.js');
 
 const app = express();
-// Middleware
+
+// Middleware for all  data
 app.use(express.json());
+app.use((err, req, res , next) =>{
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal error server...!!!";
+    return res.status(statusCode).json({
+        success : false,
+        statusCode, 
+        message,
+    });
+});
 
 // Creating an app listening and directing to mongoDB
 const urimongoDB = process.env.ATLAS_URI;
