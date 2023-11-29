@@ -4,7 +4,7 @@ const signup = async (req, res) => {
   const { username, email, password } = req.body;
   const newUser = new User({username, email, password}); 
    await newUser.save()
-    .then(() => res.json('User added!'))
+    .then(() => res.json('User added Successfully!'))
     .catch(err => res.status(400).json('Error: ' + err));
 }
 
