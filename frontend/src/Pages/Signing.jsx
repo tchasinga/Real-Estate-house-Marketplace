@@ -31,7 +31,7 @@ export default function SignIn() {
        dispatch(signInFailure("Failed to sign in. Please try again."))
         return;
       }
-    dispatch(singInSuccess(data))
+    dispatch(singInSuccess(data)) 
       navigate('/')
       } catch (error) {
         dispatch(signInFailure("Failed to sign in. Please try again."))
