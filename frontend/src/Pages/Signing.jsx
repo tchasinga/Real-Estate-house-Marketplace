@@ -42,7 +42,7 @@ export default function SignIn() {
   return (
     <div className='p-3  max-w-lg mx-auto'>
         <h1 className="text-3xl text-center font-semibold m-7">Sing-in</h1>
-        <form action="" onSubmit={handlerSubmit} className='flex flex-col gap-3'>
+        <form action="" onSubmit={handlerSubmit} className='flex flex-col'>
           <input type="email" placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
           <input type="password" placeholder='Password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
           <button  disabled={loading} className='bg-gray-900 text-white rounded-lg uppercase hover:opacity-90  p-3 font-medium w-44'>{ loading ?'loading' : 'Sign-in'}</button>
