@@ -6,32 +6,27 @@ const User = require("../model/user.model.js");
     res.json({message: "Welcome to the backend!"});
 }
 
+// Update user with his all  informations
 const updateUser = async (req, res, next) =>{
-    if(req.user.id !== req.params.id) return next(errorhandler(401,"You can update only your account!"));
+    if(req.user.id !== req.params.id)return next(errorhandler(401, "You can only changes your own account !"));
     try {
         if(req.body.password){
-            req.body.password = bycrypt.hashSync(req.body.password, 10);
+            req.body.password =  bycrypt.hashSync(req.body.password, 10)
         }
-        const  updatedUser = await User.findByIdAndUpdate(req.params.id, {
-            $set: {
+
+        const updatedUser = await User.findByIdAndUpdate(req.params.id,{
+            $set:{
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-               avatar: req.body.avatar,
-                // coverPicture: req.body.coverPicture,
-                // followers: req.body.followers,
-                // following: req.body.following,
-                // isAdmin: req.body.isAdmin,
-                // desc: req.body.desc,
-                // city: req.body.city,
-                // from: req.body.from,
-                // relationship: req.body.relationship,
+                avatar: req.body.avatar,
             }
         },{new: true});
-          const {password, ...rest} = updatedUser._doc;
-            res.status(200).json(rest);
+
+        const {password, ...rest} = updatedUser._doc;
+        res.status(200).json(rest); 
     } catch (error) {
-       next(error);  
+     next(error)
     }
 }
 module.exports = { test , updateUser };

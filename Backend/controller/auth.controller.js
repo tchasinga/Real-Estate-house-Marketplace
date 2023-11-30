@@ -40,7 +40,7 @@ const singin =  async(req, res, next) => {
     if (!validPassword) {
       throw new errorhandler(401, 'Wrong credentials or password')
     } 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, { expiresIn: '4d' })
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, { expiresIn: '100d' })
     const {password: pass, ...rest} = validUser._doc;
     res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
   } catch (error) {
@@ -53,7 +53,7 @@ const google = async (req, res, next) =>{
   try {
     const user = await User.findOne({ email: req.body.email })
     if(user){
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '4d' })
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '100d' })
       const {password: pass, ...rest} = user._doc;
       res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
     } else {
@@ -62,7 +62,7 @@ const google = async (req, res, next) =>{
       const newUser = new User({username: req.body.name, email: req.body.email, password : hashedPassword, avatar: req.body.imageUrl});
       await newUser.save();
       // Creating a token
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '4d' })
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '100d' })
       const {password: pass, ...rest} = newUser._doc;
       res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
     }

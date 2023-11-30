@@ -7,23 +7,19 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
-import {updateUserSuccess, updateUserFailure , updateUserStart} from '../redux/user/userSlice.js'
+import { updateUserSuccess, updateUserFailure, updateUserStart } from '../redux/user/userSlice.js'
 
 export default function Profile() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
 
-  // console.log(fileUploadError)
-  // console.log(filePerc)
-  console.log(formData)
-
-  const currentUser = useSelector(
-    (state) => state.user && state.user.user.currentUser
-  );
+  const currentUser = useSelector((state) => state.user?.user?.currentUser);
+  const loading = useSelector((state) => state.user?.user?.loading);
+  const error = useSelector((state) => state.user?.user?.error);
 
   const handleFileUpload = async () => {
     const storage = getStorage(app);
@@ -34,12 +30,11 @@ export default function Profile() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         setFileUploadError(true);
       },
       () => {
@@ -47,39 +42,50 @@ export default function Profile() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setFormData({ ...formData, avatar: downloadURL });
         });
-      },
-      [formData]
+      }
     );
   };
 
-  // updating User Information
-  const hanndleChanges = (e) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // Submitted Changes from different form
-  const handleSubmit = async (e) => {
+  const handlerSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(updateUserStart())
-      const res =  fetch(`http://localhost:4000/api/user/update/${currentUser._id}`, {
-        method: "POST",
+      dispatch(updateUserStart());
+      const res = await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if(data.success == false){
-        dispatch(updateUserFailure("Failed to update user. Please try again."))
+
+      if (!res.ok) {
+        console.error(`HTTP error! Status: ${res.status}`);
+        dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
         return;
       }
-      dispatch(updateUserSuccess(data))
-    } catch (error) {
-      dispatch(updateUserFailure("Failed to update user. Please try again."))
-    }
 
-  }; 
+      if (!res.headers.get('content-type')?.includes('application/json')) {
+        console.error('Server response was not in JSON format. Please check the server response.');
+        dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
+        return;
+      }
+
+      const data = await res.json(); // Parse the response as JSON
+
+      if (data.success === true) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+    } catch (error) {
+      console.error(error);
+      dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
+    }
+  };
 
   useEffect(() => {
     if (file) {
@@ -90,7 +96,7 @@ export default function Profile() {
   return (
     <div className="p-2 max-w-lg mx-auto">
       <h1 className="text-2xl font-semibold text-center my-7">Profile pages</h1>
-      <form onSubmit={handleSubmit} className="gap-3 flex flex-col">
+      <form  onSubmit={handlerSubmit} className="gap-3 flex flex-col">
         <img
           src={formData.avatar || currentUser.avatar}
           alt="avatar"
@@ -100,12 +106,10 @@ export default function Profile() {
         <p className="text-sm self-center">
           {fileUploadError ? (
             <span className="text-red-500">
-              Failed to upload image. Please try again. {currentUser.username}
-            (Your image must be less than 2 mb)</span>
-          ) : filePerc > 0 && filePerc < 100 ? (
-            <span className="text-green-950">
-              Uploading image...{filePerc}%
+              Failed to upload image. Please try again. {currentUser?.username} (Your image must be less than 2 mb)
             </span>
+          ) : filePerc > 0 && filePerc < 100 ? (
+            <span className="text-green-950">Uploading image...{filePerc}%</span>
           ) : filePerc === 100 ? (
             <span className="text-green-500">Image uploaded successfully.</span>
           ) : null}
@@ -119,42 +123,38 @@ export default function Profile() {
           accept="image/*"
         />
 
-        {/* <h1 className="text-xl font-semibold">{currentUser.username}</h1>
-          <p className="text-sm text-gray-500">{currentUser.email}</p> */}
-
         <input
           type="text"
           id="username"
           placeholder="username"
           className="border p-3 rounded-lg"
-          defaultValue={currentUser.username}
-          onChange={hanndleChanges}
+          defaultValue={currentUser?.username}
+          onChange={handleChange}
         />
         <input
           type="email"
           id="email"
           placeholder="email"
           className="border p-3 rounded-lg"
-          defaultValue={currentUser.email}
-          onChange={hanndleChanges}
+          defaultValue={currentUser?.email}
+          onChange={handleChange}
         />
         <input
           type="password"
           id="password"
           placeholder="password"
           className="border p-3 rounded-lg"
-          onChange={hanndleChanges}
+          onChange={handleChange}
         />
-        <button className="bg-slate-700 text-white rounded-lg p-3 uppercase">
-          update
+        <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase">
+          {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
       <div className="flex justify-between mt-5 items-center">
-        <span className="text-red-700 cursor-pointer text-sm">
-          Delete Account
-        </span>
-        <span className="text-blue-600 cursor-pointer text-sm">Sing out</span>
+        <span className="text-red-700 cursor-pointer text-sm">Delete Account</span>
+        <span className="text-blue-600 cursor-pointer text-sm">Sign out</span>
       </div>
+      <p className="text-sm text-red">{error ? error : ''}</p>
     </div>
   );
 }

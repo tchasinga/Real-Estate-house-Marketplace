@@ -1,6 +1,6 @@
 const  express =  require('express');
 const { test , updateUser} = require('../controller/user.controller.js');
-const verifyUser = require('../Utils/UserVerifier.js');
+const verifyUser = require('../Utils/verifyUser.js');
 const  router =  express.Router();
 
 // Require the controllers WHICH WE DID NOT CREATE YET!!
