@@ -7,7 +7,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
-import { updateUserSuccess, updateUserFailure, updateUserStart } from '../redux/user/userSlice.js'
+import { updateUserSuccess, updateUserFailure, updateUserStart} from '../redux/user/userSlice.js'
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -16,10 +16,11 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  const currentUser = useSelector((state) => state.user?.user?.currentUser);
-  const loading = useSelector((state) => state.user?.user?.loading);
-  const error = useSelector((state) => state.user?.user?.error);
+  const currentUser = useSelector((state) => state.user?.user?.currentUser); // Updated selector usage
+  const loading = useSelector((state) => state.user?.user?.loading); // Updated selector usage
+  const error = useSelector((state) => state.user?.user?.error); // Updated selector usage
 
   const handleFileUpload = async () => {
     const storage = getStorage(app);
@@ -46,46 +47,36 @@ export default function Profile() {
     );
   };
 
+  // Updating User Information
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handlerSubmit = async (e) => {
+  // Submitted Changes from different form
+  const handlerSubmit = async(e) => {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`, {
+      const  res = await fetch(`http://localhost:4000/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        console.error(`HTTP error! Status: ${res.status}`);
-        dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
-        return;
-      }
-
-      if (!res.headers.get('content-type')?.includes('application/json')) {
-        console.error('Server response was not in JSON format. Please check the server response.');
-        dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
-        return;
-      }
-
-      const data = await res.json(); // Parse the response as JSON
-
-      if (data.success === true) {
+      })
+      const data = await res.json();
+      if(data.success === true) {
         dispatch(updateUserFailure(data.message));
         return;
       }
       dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
     } catch (error) {
       console.error(error);
-      dispatch(updateUserFailure('An unexpected error occurred. Please try again.'));
+      dispatch(updateUserFailure(error.message)); 
     }
   };
+ 
 
   useEffect(() => {
     if (file) {
@@ -155,6 +146,7 @@ export default function Profile() {
         <span className="text-blue-600 cursor-pointer text-sm">Sign out</span>
       </div>
       <p className="text-sm text-red">{error ? error : ''}</p>
+      <p className="text-sm text-green-500">{updateSuccess ? 'Update Success ! ' : ''}</p>
     </div>
   );
 }

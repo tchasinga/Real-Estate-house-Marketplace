@@ -4,14 +4,13 @@ const mongoose = require('mongoose');
 const userRouter = require("./routes/user.route.js");
 const authRouter = require('./routes/auth.route.js');
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 
 const app = express();
 
 // Middleware to parse JSON
 app.use(express.json());
-app.use(cookieParser());
-
+// app.use(cookieParser());
 // CORS middleware
 app.use(
   cors({

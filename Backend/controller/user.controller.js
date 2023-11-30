@@ -8,7 +8,6 @@ const User = require("../model/user.model.js");
 
 // Update user with his all  informations
 const updateUser = async (req, res, next) =>{
-    if(req.user.id !== req.params.id)return next(errorhandler(401, "You can only changes your own account !"));
     try {
         if(req.body.password){
             req.body.password =  bycrypt.hashSync(req.body.password, 10)
@@ -29,4 +28,15 @@ const updateUser = async (req, res, next) =>{
      next(error)
     }
 }
-module.exports = { test , updateUser };
+
+// Deleting a user from the database
+const deleteUser = async (req, res, next) =>{
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        res.status(200).json("User were deleted successfully");
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { test , updateUser , deleteUser};
