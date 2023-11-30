@@ -33,7 +33,8 @@ const updateUser = async (req, res, next) =>{
 const deleteUser = async (req, res, next) =>{
     try {
         const user = await User.findByIdAndDelete(req.params.id);
-        res.status(200).json("User were deleted successfully").clearCookie("token");
+        res.clearCookie("access_token");
+        res.status(200).json("User were deleted successfully")
     } catch (error) {
         next(error);
     }

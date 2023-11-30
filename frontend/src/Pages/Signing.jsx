@@ -28,13 +28,13 @@ export default function SignIn() {
       })
       const data = await res.json()
       if (data.success == false){
-       dispatch(signInFailure("Failed to sign in. Please try again."))
+       dispatch(signInFailure(data.message || "Failed to sign in. Please try again."))
         return;
       }
     dispatch(singInSuccess(data)) 
       navigate('/')
       } catch (error) {
-        dispatch(signInFailure("Failed to sign in. Please try again."))
+        dispatch(signInFailure(error.message || "Failed to sign in. Please try again."))
       }
     }
    
