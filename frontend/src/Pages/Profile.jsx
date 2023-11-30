@@ -7,7 +7,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
-import { updateUserSuccess, updateUserFailure, updateUserStart} from '../redux/user/userSlice.js'
+import { updateUserSuccess, updateUserFailure, updateUserStart,  deleteUserStart,deleteUserSuccess,deleteUserFailure } from '../redux/user/userSlice.js'
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -76,8 +76,29 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message)); 
     }
   };
- 
-
+    
+  const handlerdeleleAccount = async() => {
+    try {
+      const  res = await fetch(`http://localhost:4000/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json();
+      if(data.success === true) {
+        dispatch(deleteUserStart(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      deleteUserSuccess(true);
+    } catch (error) {
+      console.error(error);
+      dispatch(deleteUserFailure(error.message)); 
+    }
+  }
+  
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -142,7 +163,7 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-5 items-center">
-        <span className="text-red-700 cursor-pointer text-sm">Delete Account</span>
+        <span  onClick={handlerdeleleAccount} className="text-red-700 cursor-pointer text-sm">Delete Account</span>
         <span className="text-blue-600 cursor-pointer text-sm">Sign out</span>
       </div>
       <p className="text-sm text-red">{error ? error : ''}</p>
