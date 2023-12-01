@@ -6,6 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import {Link} from "react-router-dom";
 import { app } from "../firebase.js";
 import { updateUserSuccess, updateUserFailure, updateUserStart,  deleteUserStart,deleteUserSuccess,deleteUserFailure,signOutUserFailure, signOutUserStart, signOutUserSuccess } from '../redux/user/userSlice.js'
 
@@ -178,6 +179,7 @@ export default function Profile() {
         <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase">
           {loading ? 'Loading...' : 'Update'}
         </button>
+        <Link to="/create-list" className="text-sm bg-slate-500 text-white uppercase p-3 text-center rounded-lg font-medium">Create list</Link>
       </form>
       <div className="flex justify-between mt-5 items-center">
         <span  onClick={handlerdeleleAccount} className="text-red-700 cursor-pointer text-sm">Delete Account</span>
