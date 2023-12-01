@@ -2,8 +2,10 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { useState } from 'react';
 import {useSelector} from 'react-redux';
 import { app } from '../firebase';
+import {useNavigate} from 'react-router-dom';
 
 export default function CreateListing() {
+    const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user?.user?.currentUser); // Updated selector usage
     const [files , setFiles] = useState([]);
     const [imageUploadImageError,  setImageUploadError] = useState(false);
@@ -14,7 +16,7 @@ export default function CreateListing() {
         address: '',
         type: 'rent',
         regularPrice:50,
-        discountPrice:50,
+        discountPrice:0,
         bathRooms: 1,
         bedRooms : 1,
         offer : false,
@@ -22,6 +24,8 @@ export default function CreateListing() {
         furnished: false, 
     });
     const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
    
     // Adding Imgae Logic to Uppload Img to the database
@@ -109,10 +113,45 @@ const handlerchanges = (e) =>{
     }
 }
 
+//  Adding Handler Submit to submit the form data to the database of MongoDB and Firebase Storage
+   const  handlerSubmitForm = async (e) =>{
+    try {
+        // Release the errors when the image upload is empty and difference between the price
+        if(formData.imageUrls.length < 1) return setError(`Please ${currentUser.username} select at least one image`);
+        if(+formData.regularPrice < +formData.regularPrice) return setError(`Please ${currentUser.username} discount price must be lower than regular price`);
+      //  Off session storage to the database
+        e.preventDefault()
+        setLoading(true)
+        setError(false)
+        const res = await fetch(`http://localhost:4000/api/addlisting/creating`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...formData,
+                userRef: currentUser._id,
+            }),
+
+        })
+        const data = await res.json()
+        setLoading(false)
+        if(data.success === true){
+            setError(data.message)
+            setLoading(false)
+            return;
+        }
+        navigate(`/listing/${data._id}`)
+    } catch (error) {
+    setError(error.message)
+    setLoading(false)
+    }
+   }
+
   return (
     <main className='p-3 max-w-4xl mx-auto'>
         <h1 className='text-2xl font-medium text-center mt-3'><span className='text-slate-500 font-bold'>{currentUser.username}, </span>Add a new listing here</h1>
-        <form className='flex  flex-col sm:flex-row gap-4 mt-6'>
+        <form onSubmit={handlerSubmitForm} className='flex  flex-col sm:flex-row gap-4 mt-6'>
             <div className="flex flex-col gap-3 flex-1">
                 <input className='border p-2 rounded-lg ' onChange={handlerchanges} value={formData.name} id='name' maxLength='100' minLength='10' required placeholder='Name' type="text" />
                 <textarea className='border p-2 rounded-lg' onChange={handlerchanges} value={formData.description} id='description' required placeholder='Description...' type="text" />
@@ -161,14 +200,16 @@ const handlerchanges = (e) =>{
                     <p className='text'>($ / month)</p>
                     </div>
                 </div>
-
-                <div className="flex items-center gap-1">
-                    <input type="number" id='discountPrice' className='p-2 border-gray-300 rounded-lg' min='50' max='10000'  required  onChange={handlerchanges} value={formData.discountPrice}/>
-                   <div className='flex flex-col items-center'>
-                   <span>Discount-price</span>
-                   <p className='text'>($ / month)</p>
-                   </div>
-                </div>
+                {/* Adding a condition for the regular price */}
+                {formData.offer &&(
+                      <div className="flex items-center gap-1">
+                      <input type="number" id='discountPrice' className='p-2 border-gray-300 rounded-lg' min='0' max='1000000'  required  onChange={handlerchanges} value={formData.discountPrice}/>
+                     <div className='flex flex-col items-center'>
+                     <span>Discount-price</span>
+                     <p className='text'>($ / month)</p>
+                     </div>
+                  </div>
+                )}
                </div>
             </div>
 
@@ -191,7 +232,8 @@ const handlerchanges = (e) =>{
                    </div>
                 ))
             }
-            <button className='p-3 bg-cyan-900 text-white rounded-lg uppercase hover:bg-green-700'>Creat listing</button>
+            <button  className='p-3 bg-cyan-900 text-white rounded-lg uppercase hover:bg-green-700'>{loading ? 'Creating...' : 'Create'}</button>
+           {error &&<p className='text-red-700 text-xs'>{error}</p>}
          </div>
         </form>
         
