@@ -7,7 +7,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
-import { updateUserSuccess, updateUserFailure, updateUserStart,  deleteUserStart,deleteUserSuccess,deleteUserFailure } from '../redux/user/userSlice.js'
+import { updateUserSuccess, updateUserFailure, updateUserStart,  deleteUserStart,deleteUserSuccess,deleteUserFailure,signOutUserFailure, signOutUserStart, signOutUserSuccess } from '../redux/user/userSlice.js'
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -98,6 +98,23 @@ export default function Profile() {
       dispatch(deleteUserFailure(error.message)); 
     }
   }
+
+  const handlerSingout = async() => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch('http://localhost:4000/api/auth/signout')
+      const data = await res.json();
+
+      if(data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      console.error(error);
+      dispatch(signOutUserFailure(error.message));
+    }
+  }
   
   useEffect(() => {
     if (file) {
@@ -164,7 +181,7 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5 items-center">
         <span  onClick={handlerdeleleAccount} className="text-red-700 cursor-pointer text-sm">Delete Account</span>
-        <span className="text-blue-600 cursor-pointer text-sm">Sign out</span>
+        <span onClick={handlerSingout} className="text-blue-600 cursor-pointer text-sm">Sign out</span>
       </div>
       <p className="text-sm text-red">{error ? error : ''}</p>
       <p className="text-sm text-green-500">{updateSuccess ? 'Update Success ! ' : ''}</p>

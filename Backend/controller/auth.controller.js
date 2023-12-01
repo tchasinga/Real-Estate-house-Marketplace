@@ -70,4 +70,16 @@ const google = async (req, res, next) =>{
   }
 } 
 
-module.exports = { signup , getUsers , singin , google}; 
+// Adding a user signing out
+const signout = (req, res, next) => {
+  try {
+    res.clearCookie('access_token');
+    res.status(200).json('User signed out successfully')
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
+module.exports = { signup , getUsers , singin , google, signout}; 
