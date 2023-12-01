@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const userRouter = require("./routes/user.route.js");
 const authRouter = require('./routes/auth.route.js');
+const listingRouter = require('./routes/listing.route.js');
 const cors = require("cors");
 // const cookieParser = require("cookie-parser");
 
@@ -43,3 +44,4 @@ mongoose
 // Adding API routes
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/addlisting', listingRouter)

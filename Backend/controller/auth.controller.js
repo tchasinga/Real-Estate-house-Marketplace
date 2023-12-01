@@ -4,6 +4,7 @@ const errorhandler = require('../Utils/error');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// Adding a user signup in the system requires
 const signup = async (req, res,  next) => {
   const { username, email, password} = req.body;
       // Hashing the password
