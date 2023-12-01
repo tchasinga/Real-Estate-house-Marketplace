@@ -8,9 +8,21 @@ export default function CreateListing() {
     const [files , setFiles] = useState([]);
     const [imageUploadImageError,  setImageUploadError] = useState(false);
     const [formData, setFormData] = useState({
-       imageUrls:  [], 
+       imageUrls:  [],
+         name: '',
+        description: '',
+        address: '',
+        type: 'rent',
+        regularPrice:50,
+        discountPrice:50,
+        bathRooms: 1,
+        bedRooms : 1,
+        offer : false,
+        parking: false,
+        furnished: false, 
     });
     const [uploading, setUploading] = useState(false);
+
    
     // Adding Imgae Logic to Uppload Img to the database
    const handlerImageSubmit = () => {
@@ -63,7 +75,6 @@ export default function CreateListing() {
    }
 
 //    Removing Image from the database
-
 const handlerRemoveimg = (index) =>{
 
     setFormData({
@@ -72,34 +83,60 @@ const handlerRemoveimg = (index) =>{
     });
 }
 
+// Adding Handler changes to collect in the form......
+const handlerchanges = (e) =>{
+    if(e.target.id === 'sale' || e.target.id === 'rent'){
+        setFormData({
+            ...formData,
+            type: e.target.id,
+        });
+        return;
+    }
+    if(e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer'){
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.checked,
+        });
+        return;
+    }
+
+    if(e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea'){
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        });
+        return;
+    }
+}
+
   return (
     <main className='p-3 max-w-4xl mx-auto'>
         <h1 className='text-2xl font-medium text-center mt-3'><span className='text-slate-500 font-bold'>{currentUser.username}, </span>Add a new listing here</h1>
         <form className='flex  flex-col sm:flex-row gap-4 mt-6'>
             <div className="flex flex-col gap-3 flex-1">
-                <input className='border p-2 rounded-lg ' id='name' maxLength='100' minLength='10' required placeholder='Name' type="text" />
-                <textarea className='border p-2 rounded-lg ' id='description' required placeholder='Description...' type="text" />
-                <input className='border p-2 rounded-lg ' id='adress' required placeholder='Adress...' type="text" /> 
+                <input className='border p-2 rounded-lg ' onChange={handlerchanges} value={formData.name} id='name' maxLength='100' minLength='10' required placeholder='Name' type="text" />
+                <textarea className='border p-2 rounded-lg' onChange={handlerchanges} value={formData.description} id='description' required placeholder='Description...' type="text" />
+                <input className='border p-2 rounded-lg ' onChange={handlerchanges} value={formData.address} id='address' required placeholder='Adress...' type="text" /> 
                
             <div className="flex gap-2 flex-wrap"> 
                <div className="flex gap-2">
-                    <input type="checkbox"  id='sale' className='w-4'/>
+                    <input type="checkbox"  id='sale' className='w-4' onChange={handlerchanges} checked={formData.type === 'sale'}/>
                     <span className='text-xs'>Sell</span>
                 </div>
              <div className="flex gap-2">
-                    <input type="checkbox"  id='rent' className='w-4'/>
-                    <span className='text-xs'>rent</span>
+                    <input type="checkbox"  id='rent' className='w-4' onChange={handlerchanges} checked={formData.type === 'rent'}/>
+                    <span className='text-xs'>Rent</span>
                 </div>
              <div className="flex gap-2">
-                    <input type="checkbox"  id='parking' className='w-4'/>
+                    <input type="checkbox"  id='parking' className='w-4' onChange={handlerchanges} checked={formData.parking}/>
                     <span className='text-xs'>Parking place</span>
                 </div>
              <div className="flex gap-2">
-                    <input type="checkbox"  id='furnished' className='w-4'/>
+                    <input type="checkbox"  id='furnished' className='w-4'  onChange={handlerchanges} checked={formData.furnished}/>
                     <span className='text-xs'>Furnished</span>
                 </div>
              <div className="flex gap-2">
-                    <input type="checkbox"  id='offer' className='w-4'/>
+                    <input type="checkbox"  id='offer' className='w-4'  onChange={handlerchanges} checked={formData.offer}/>
                     <span className='text-xs'>Offer</span>
                 </div>
                </div>
@@ -108,17 +145,17 @@ const handlerRemoveimg = (index) =>{
 
                <div className="text-xs flex flex-wrap gap-4">
                 <div className="flex items-center gap-1">
-                    <input type="number" id='bedrooms' className='p-2 border-gray-300 rounded-lg' min='1' max='10' required/>
+                    <input type="number" id='bedRooms' className='p-2 border-gray-300 rounded-lg' min='1' max='10000' required  onChange={handlerchanges} value={formData.bedRooms}/>
                     <span>Bed-rooms</span>
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='bathrooms' className='p-2 border-gray-300 rounded-lg' min='1' max='10' required/>
+                    <input type="number" id='bathRooms' className='p-2 border-gray-300 rounded-lg'  min='1' max='10000'  required  onChange={handlerchanges} value={formData.bathRooms}/>
                     <span>Bath-rooms</span>
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='regularprice' className='p-2 border-gray-300 rounded-lg' min='1' max='10' required/>
+                    <input type="number" id='regularPrice' className='p-2 border-gray-300 rounded-lg' min='50' max='10000' required  onChange={handlerchanges} value={formData.regularPrice}/>
                     <div className='flex flex-col items-center'>
                     <span>Regular-price</span>
                     <p className='text'>($ / month)</p>
@@ -126,7 +163,7 @@ const handlerRemoveimg = (index) =>{
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='discountprice' className='p-2 border-gray-300 rounded-lg' min='1' max='10' required/>
+                    <input type="number" id='discountPrice' className='p-2 border-gray-300 rounded-lg' min='50' max='10000'  required  onChange={handlerchanges} value={formData.discountPrice}/>
                    <div className='flex flex-col items-center'>
                    <span>Discount-price</span>
                    <p className='text'>($ / month)</p>
