@@ -1,6 +1,6 @@
 const User = require('../model/user.model.js');
 const bycrypt = require('bcrypt');
-const errorhandler = require('../Utils/error');
+// const errorhandler = require('../Utils/error');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -35,11 +35,11 @@ const singin =  async(req, res, next) => {
   try {
     const validUser = await User.findOne({ email: email })
     if (!validUser) {
-      throw new errorhandler(404, 'User not found in the system')
+      throw new (404, 'User not found in the system')
     }  
     const validPassword = bycrypt.compareSync(password, validUser.password)
     if (!validPassword) {
-      throw new errorhandler(401, 'Wrong credentials or password')
+      throw new (401, 'Wrong credentials or password')
     } 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, { expiresIn: '100d' })
     const {password: pass, ...rest} = validUser._doc;

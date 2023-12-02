@@ -1,6 +1,7 @@
-const errorhandler = require("../Utils/error");
+// const errorhandler = require("../Utils/error");
 const bycrypt =  require('bcrypt');
 const User = require("../model/user.model.js");
+const Listing = require("../model/listing.model.js");
 
  const test = (req,  res) =>{
     res.json({message: "Welcome to the backend!"});
@@ -40,4 +41,18 @@ const deleteUser = async (req, res, next) =>{
     }
 }
 
-module.exports = { test , updateUser , deleteUser};
+
+// Get all the listing information from the database
+const getUserListing = async (req, res, next) => {
+    try {
+        const listings = await Listing.find({userRef: req.params.id});
+        res.status(200).json(listings);
+
+    } catch (error) {
+        // Handle errors
+        next(error);
+    }
+};
+
+
+module.exports = { test , updateUser , deleteUser , getUserListing};
