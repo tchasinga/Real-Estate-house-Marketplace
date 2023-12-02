@@ -154,6 +154,7 @@ export default function Profile() {
       })
       const data = await res.json();
       if(data.success === true) {
+        setFormData(data)
        console.log(data.success);
         return;
       }
