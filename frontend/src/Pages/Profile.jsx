@@ -79,7 +79,8 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message)); 
     }
   };
-    
+  
+  // Delete Account user 
   const handlerdeleleAccount = async() => {
     try {
       const  res = await fetch(`http://localhost:4000/api/user/delete/${currentUser._id}`, {
@@ -101,7 +102,8 @@ export default function Profile() {
       dispatch(deleteUserFailure(error.message)); 
     }
   }
-
+   
+  // handler Singout user 
   const handlerSingout = async() => {
     try {
       dispatch(signOutUserStart());
@@ -141,6 +143,23 @@ export default function Profile() {
       
     } catch (error) {
       showListingErrors(true);
+    }
+  }
+
+  // Delete Image or Information from the listing 
+  const handlerListingDelete = async(listingId) => {
+    try {
+      const res = await fetch(`http://localhost:4000/api/addlisting/delete/${listingId}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json();
+      if(data.success === true) {
+       console.log(data.success);
+        return;
+      }
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -224,7 +243,7 @@ export default function Profile() {
        </Link>
 
           <div className="flex flex-col items-center">
-            <button className="text-red-700 uppercase">Delete</button>
+            <button onClick={()=>handlerListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
             <button className="text-blue-700 uppercase">Edit</button>
           </div>
        </div>
