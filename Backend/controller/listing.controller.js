@@ -10,6 +10,7 @@ const createListing = async (req, res, next) => {
     }
 }
 
+// deleting a listing component....
 const deleteListing = async (req, res, next) => {
     try {
         const listing = await Listing.findByIdAndDelete(req.params.id);
@@ -22,6 +23,34 @@ const deleteListing = async (req, res, next) => {
     }
 }
 
+// updating a listing component.... information
+const updateListing = async (req, res, next) => {
+    try {
+         const updatedListing = await Listing.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+         )
+         res.status(200).json(updatedListing)
+    } catch (error) {
+        next(error); 
+    }
+}
 
-module.exports = {createListing, deleteListing}
+// Public GET request for all USER IN THE WEB APP
+const getAllListings = async (req, res, next) => {
+    try {
+        const listings = await Listing.findById(req.params.id)
+        return res.status(200).json(listings);
+    } catch (error) {
+        next(error);
+    }
+}
 
+
+module.exports = {createListing, deleteListing, updateListing, getAllListings}
+
+ 
