@@ -15,6 +15,7 @@ import {
   FaParking,
   FaShare,
 } from 'react-icons/fa';
+import Contact from './Contact';
 
 
 
@@ -140,11 +141,11 @@ export default function Listing() {
               >
                 Contact landlord
               </button>
-            )}
+             )}
             {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
     </main>
-  );
+  ); 
 }

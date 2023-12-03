@@ -54,5 +54,17 @@ const getUserListing = async (req, res, next) => {
     }
 };
 
+// Get a user CONTACT information (WHEN USER WANNA COMMUNICATE WITH OWNER)
+const getUserConctact = async (req, res, next) =>{
+    // TODO
+  try {
+    let  user = await User.findById(req.params.id);
+    const {password : pass, ...rest} = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+}
 
-module.exports = { test , updateUser , deleteUser , getUserListing};
+
+module.exports = { test , updateUser , deleteUser , getUserListing, getUserConctact, getUserConctact};
