@@ -72,3 +72,11 @@ body{
       transform: rotate(-360deg);
     }
   }
+
+  @media only screen and (max-width: 468px){
+
+  .mydes{
+    margin: 0 auto;
+    width: 90%; 
+  }
+  }

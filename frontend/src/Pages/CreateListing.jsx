@@ -184,17 +184,17 @@ const handlerchanges = (e) =>{
 
                <div className="text-xs flex flex-wrap gap-4">
                 <div className="flex items-center gap-1">
-                    <input type="number" id='bedRooms' className='p-2 border-gray-300 rounded-lg' min='1' max='10000' required  onChange={handlerchanges} value={formData.bedRooms}/>
+                    <input type="number" id='bedRooms' className='p-2 border-gray-300 rounded-lg' min='1' max='10000000' required  onChange={handlerchanges} value={formData.bedRooms}/>
                     <span>Bed-rooms</span>
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='bathRooms' className='p-2 border-gray-300 rounded-lg'  min='1' max='10000'  required  onChange={handlerchanges} value={formData.bathRooms}/>
+                    <input type="number" id='bathRooms' className='p-2 border-gray-300 rounded-lg'  min='1' max='10000000'  required  onChange={handlerchanges} value={formData.bathRooms}/>
                     <span>Bath-rooms</span>
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='regularPrice' className='p-2 border-gray-300 rounded-lg' min='50' max='10000' required  onChange={handlerchanges} value={formData.regularPrice}/>
+                    <input type="number" id='regularPrice' className='p-2 border-gray-300 rounded-lg' min='500000' max='10000000' required  onChange={handlerchanges} value={formData.regularPrice}/>
                     <div className='flex flex-col items-center'>
                     <span>Regular-price</span>
                     <p className='text'>($ / month)</p>

@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loadtwo from "../animation/Loadtwo";
 import Errors from "../animation/Errors";
+import NewErrors from "../errors/NewErrors";
 // import Errors from "../animation/Errors";
+import '../errors/pers.css';
+import ListingCard from "../Components/ListingCard";
 
 export default function Search() {
   const navigation = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [listing, setListing] = useState([]);
-  console.log(listing);
 // Initialisation side used for search is in the top 
+console.log(listing)
 
 const [sidebarData, setSidebarData] = useState({
   searchTerm: '',
@@ -110,11 +113,6 @@ const handlerSubmit = (e) => {
 }
 
 
-
-
-
-
-
   return (
     <div className="flex flex-col md:flex-row">
 
@@ -176,10 +174,23 @@ const handlerSubmit = (e) => {
          </form>
        </div>
 
-       <div className="">
+       <div className="mydes">
          <h1 className="text-3xl font-semibold border-b p-3 text-slate-600">Your Listing result...</h1>
          {loading && <h1 className='LoadingpageContainer'><Loadtwo/></h1>}
           {error && <h1 className='LoadingpageContainer'><Errors/></h1>}
+          <div className="">
+             {!loading && listing.length === 0 && (
+              <div className="flex flex-col gap-7 LoadingpageContainer">
+                  <NewErrors/>
+                <h1 className="text-xs font-semibold text-slate-600">No Listing found...</h1>
+              </div>
+             )}
+          </div>
+          <div className="mt-7 px-5 flex gap-5 flex-wrap w-full">
+            {listing.map((list) => (
+              <ListingCard key={list._id} listing={list} />
+            ))}
+            </div>
        </div>
     </div>
   )
