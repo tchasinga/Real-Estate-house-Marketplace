@@ -194,7 +194,7 @@ const handlerchanges = (e) =>{
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <input type="number" id='regularPrice' className='p-2 border-gray-300 rounded-lg' min='500000' max='10000000' required  onChange={handlerchanges} value={formData.regularPrice}/>
+                    <input type="number" id='regularPrice' className='p-2 border-gray-300 rounded-lg' min='0' max='10000000' required  onChange={handlerchanges} value={formData.regularPrice}/>
                     <div className='flex flex-col items-center'>
                     <span>Regular-price</span>
                     <p className='text'>($ / month)</p>

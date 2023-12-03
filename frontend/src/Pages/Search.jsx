@@ -12,8 +12,25 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [listing, setListing] = useState([]);
+  const [showMore , setShowMore] = useState(false);
 // Initialisation side used for search is in the top 
-console.log(listing)
+
+// Adding function tha will  handler the show more button
+const onShowManyClick = async () => {
+ const numberOfListing  = listing.length;
+ const startIndex = numberOfListing;
+ const urlParams = new URLSearchParams(location.search);
+  urlParams.set('startIndex', startIndex);
+ const searchQuery = urlParams.toString(); 
+ const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?${searchQuery}`);
+ const data = await res.json();
+
+ if(data.length < 8) {
+    setShowMore(false);
+ }
+ setListing([...listing, ...data]);
+}
+
 
 const [sidebarData, setSidebarData] = useState({
   searchTerm: '',
@@ -51,10 +68,19 @@ useEffect(() =>{
 }
 const fetchingListings = async () => {
   try {
-    setLoading(true);
+    setLoading(true); 
+    setShowMore(false);
     const searchQuery =  urlParams.toString();
     const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?${searchQuery}`);
     const data = await res.json();
+
+    // Adding showMore action to the frontend 
+    if(data.length > 8) {
+      setShowMore(true);
+    }else{
+      setShowMore(false);
+    }
+
     if (data.success === false) {
       setError(true);
       setLoading(false);
@@ -190,6 +216,12 @@ const handlerSubmit = (e) => {
             {listing.map((list) => (
               <ListingCard key={list._id} listing={list} />
             ))}
+            
+            {showMore && (
+              <div className="flex justify-center w-full">
+                <button onClick={onShowManyClick} className="uppercase bg-zinc-800 p-3 text-center text-white rounded-3xl font-medium text-xs hover:bg-green-900 hover:scale-95 cursor-pointer">show-more</button>
+              </div>
+            )}
             </div>
        </div>
     </div>
