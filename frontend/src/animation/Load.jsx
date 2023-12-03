@@ -6,7 +6,6 @@ ring2.register()
 export default function Load() {
   return (
     <div>
-      {/* Use the l-infinity component here */}
       <l-ring-2
         size="40"
         stroke="5"

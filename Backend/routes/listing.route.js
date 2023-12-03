@@ -7,7 +7,7 @@ router.post('/creating' , createListing);
 router.delete('/delete/:id' , deleteListing);
 router.post('/update/:id' , updateListing);
 router.get('/get/:id', getListingdatabyid);
-router.get('/get', getAllListedDataFromListing);
+router.get('/gettingdata', getAllListedDataFromListing);
 
 
 module.exports = router;

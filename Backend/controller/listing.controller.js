@@ -76,12 +76,12 @@ const getAllListedDataFromListing = async (req, res, next) => {
             type = {$in: ['sale', 'rent']};
         }
 
-       const seachTerm = req.query.seachTerm || '';
+       const searchTerm = req.query.searchTerm || '';
        const sort = req.query.sort || 'createdAt';
        const order = req.query.order || 'desc'; 
 
          const listings = await Listing.find({
-              name: {$regex: seachTerm, $options: 'i'},
+              name: {$regex: searchTerm, $options: 'i'},
               offer,
               furnished,
               parking,
