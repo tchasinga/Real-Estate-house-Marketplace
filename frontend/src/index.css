@@ -80,3 +80,7 @@ body{
     width: 90%; 
   }
   }
+
+  .getText{
+    text-transform: capitalize;
+  }

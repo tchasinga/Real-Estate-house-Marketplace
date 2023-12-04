@@ -104,12 +104,12 @@ export default function Home() {
 
     {/* More product deatails and crosser out filter */}
       
-      r<div className="max-w-6xl mx-auto flex flex-col gap-8 my-10">
+   <div className="max-w-6xl mx-auto flex flex-col gap-8 my-10">
     {offerListings && offerListings.length > 0 && (
     <div className="">
       <div className="">
         <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
-          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see recent Offer
+          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Offer
         </h1>
         <hr className='w-48 p-2'/>
         <Link to={`/search?offer=true`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
@@ -123,6 +123,46 @@ export default function Home() {
         </div>
     </div> 
   )}
+
+
+{saleListings && saleListings.length > 0 && (
+    <div className="">
+      <div className="">
+        <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
+          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Sell
+        </h1>
+        <hr className='w-48 p-2'/>
+        <Link to={`/search?type=sale`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
+          View Products now...
+        </Link>
+      </div>
+        <div className="flex flex-wrap gap-4 mt-5">
+        {saleListings.map((listing) => (
+        <ListingCard key={listing._id} listing={listing} />
+      ))}
+        </div>
+    </div> 
+  )}
+
+{rentListings && rentListings.length > 0 && (
+    <div className="">
+      <div className="">
+        <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
+          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Rent
+        </h1>
+        <hr className='w-48 p-2'/>
+        <Link to={`/search?offer=true`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
+          View Products now...
+        </Link>
+      </div>
+        <div className="flex flex-wrap gap-4 mt-5">
+        {rentListings.map((listing) => (
+        <ListingCard key={listing._id} listing={listing} />
+      ))}
+        </div>
+    </div> 
+  )}
+
 </div>
 
     </div>
