@@ -1,0 +1,13 @@
+# dotenv environment variable files
+.env*
+.env /*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env /
+# npm package manager
+# Ignore log files
+*.log
+# Ignore yarn.lock file
+yarn.lock
