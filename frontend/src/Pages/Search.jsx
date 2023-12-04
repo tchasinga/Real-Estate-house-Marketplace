@@ -6,6 +6,7 @@ import NewErrors from "../errors/NewErrors";
 // import Errors from "../animation/Errors";
 import '../errors/pers.css';
 import ListingCard from "../Components/ListingCard";
+import { FaHouseUser } from "react-icons/fa";
 
 export default function Search() {
   const navigation = useNavigate();
@@ -141,8 +142,7 @@ const handlerSubmit = (e) => {
 
   return (
     <div className="flex flex-col md:flex-row">
-
-       <div className="p-6 border-b-2 md:border-r-2 md:min-h-screen">
+       <div className="p-6 border-b-2 md:border-r-2 w-full md:min-h-screen">
          <form onClick={handlerSubmit} className="flex flex-col gap-7">
               <div className="flex items-center gap-2 ">
                 <label className="whitespace-nowrap">Search Term :</label>
@@ -201,7 +201,10 @@ const handlerSubmit = (e) => {
        </div>
 
        <div className="mydes">
-         <h1 className="text-3xl font-semibold border-b p-3 text-slate-600">Your Listing result...</h1>
+       <div className="flex items-center gap-0">
+         <h1 className="text-2xl  font-semibold border-b  flex items-center p-3 text-slate-600">Available & General House:<span className="gap-5">{listing.length}</span></h1>
+          <FaHouseUser className=""/>
+     </div>
          {loading && <h1 className='LoadingpageContainer'><Loadtwo/></h1>}
           {error && <h1 className='LoadingpageContainer'><Errors/></h1>}
           <div className="">
@@ -212,7 +215,7 @@ const handlerSubmit = (e) => {
               </div>
              )}
           </div>
-          <div className="mt-7 px-5 flex gap-5 flex-wrap w-full">
+          <div className="mt-7 justify-center flex gap-5 flex-wrap w-full">
             {listing.map((list) => (
               <ListingCard key={list._id} listing={list} />
             ))}
