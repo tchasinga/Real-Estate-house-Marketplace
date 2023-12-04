@@ -19,7 +19,7 @@ export default function SignIn() {
     e.preventDefault()
    try {
     dispatch(signInStart())
-      const res = await fetch('http://localhost:4000/api/auth/singin', {
+      const res = await fetch('https://landind-service-estate.onrender.com/api/auth/singin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -124,7 +124,7 @@ const handlerchanges = (e) =>{
         e.preventDefault()
         setLoading(true)
         setError(false)
-        const res = await fetch(`http://localhost:4000/api/addlisting/update/${params.listingId}`, {
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/update/${params.listingId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const handlerchanges = (e) =>{
    useEffect(() => {
     const fetchingList = async () => {
         const listingId = params.listingId;
-        const res = await fetch(`http://localhost:4000/api/addlisting/get/${listingId}`);
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/get/${listingId}`);
         const data = await res.json();
         setFormData(data)
     };

@@ -23,7 +23,7 @@ const onShowManyClick = async () => {
   const urlParams = new URLSearchParams(location.search);
   urlParams.set('startIndex', startIndex);
   const searchQuery = urlParams.toString();
-  const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?${searchQuery}`);
+  const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/gettingdata?${searchQuery}`);
   const data = await res.json();
 
   if (data.length < 9) {
@@ -71,7 +71,7 @@ const fetchingListings = async () => {
     setLoading(true);
     setShowMore(false);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?${searchQuery}`);
+    const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/gettingdata?${searchQuery}`);
     const data = await res.json();
 
     if (data.length > 8) {

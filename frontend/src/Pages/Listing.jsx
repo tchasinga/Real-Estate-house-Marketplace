@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Load from '../animation/Load';
 import Messagingyourerrors from '../errors/Messagebugs';
 import SwiperCore from 'swiper';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import {
@@ -27,13 +27,13 @@ export default function Listing() {
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
   const params = useParams();
-  const {currentUser} = useSelector((state) => state.user?.user?.currentUser);
+  // const {currentUser} = useSelector((state) => state.user?.user?.currentUser);
 
   useEffect(() => {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:4000/api/addlisting/get/${params.listingId}`);
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/get/${params.listingId}`);
         const data = await res.json();
         if (data.success === false) {
           setError(true);
@@ -50,6 +50,10 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
+
+  const handleContactButtonClick = () => {
+    setContact(true);
+  };
 
   return (
     <main>
@@ -134,15 +138,15 @@ export default function Listing() {
 
             {/* Adding a condition a sending message */}
 
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button
-                onClick={() => setContact(true)}
-                className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'
-              >
-                Contact landlord
-              </button>
-             )}
-            {contact && <Contact listing={listing} />}
+        <button
+          onClick={handleContactButtonClick}
+          className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'
+        >
+          Contact landlord
+        </button>
+
+      {/* Render Contact component if contact is initiated */}
+      {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

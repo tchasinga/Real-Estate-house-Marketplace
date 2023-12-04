@@ -14,7 +14,7 @@ export default function Contact({ listing }) {
     const fetchLandowner = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:4000/api/user/${listing.userRef}`);
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/user/${listing.userRef}`);
         const data = await res.json();
         setLandowner(data);
         if (data.success === false) {

@@ -123,7 +123,7 @@ const handlerchanges = (e) =>{
         e.preventDefault()
         setLoading(true)
         setError(false)
-        const res = await fetch(`http://localhost:4000/api/addlisting/creating`, {
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/creating`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

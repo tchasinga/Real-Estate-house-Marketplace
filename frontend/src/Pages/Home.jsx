@@ -12,6 +12,8 @@ import ListingCard from '../Components/ListingCard';
 export default function Home() {
   SwiperCore.use([Navigation]);
   const currentUser = useSelector((state) => state.user && state.user.user.currentUser);
+  // eslint-disable-next-line no-unused-vars
+  const username = currentUser?.username;
   const [offerListings, setOfferListings] = useState([])
   const [saleListings, setSaleListings] = useState([])
   const [rentListings, setRentListings] = useState([])
@@ -21,7 +23,7 @@ export default function Home() {
     const fetchOfferListings = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?offer=true&limit=4`)
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/gettingdata?offer=true&limit=4`)
         const data = await res.json()
         setOfferListings(data)
         fetchRentListings()
@@ -34,7 +36,7 @@ export default function Home() {
     const fetchRentListings = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?type=rent&limit=4`)
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/gettingdata?type=rent&limit=4`)
         const data = await res.json()
         setRentListings(data)
         fetchSaleListings()
@@ -47,7 +49,7 @@ export default function Home() {
     const fetchSaleListings = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`http://localhost:4000/api/addlisting/gettingdata?type=sale&limit=4`)
+        const res = await fetch(`https://landind-service-estate.onrender.com/api/addlisting/gettingdata?type=sale&limit=4`)
         const data = await res.json()
         setSaleListings(data)
         setLoading(false)
@@ -108,9 +110,11 @@ export default function Home() {
     {offerListings && offerListings.length > 0 && (
     <div className="">
       <div className="">
-        <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
-          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Offer
-        </h1>
+      {currentUser && (
+  <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
+    Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Offer
+  </h1>
+     )}
         <hr className='w-48 p-2'/>
         <Link to={`/search?offer=true`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
           View Products now...
@@ -128,9 +132,11 @@ export default function Home() {
 {saleListings && saleListings.length > 0 && (
     <div className="">
       <div className="">
-        <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
-          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Sell
-        </h1>
+      {currentUser && (
+  <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
+    Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Offer
+  </h1>
+)}
         <hr className='w-48 p-2'/>
         <Link to={`/search?type=sale`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
           View Products now...
@@ -147,9 +153,11 @@ export default function Home() {
 {rentListings && rentListings.length > 0 && (
     <div className="">
       <div className="">
-        <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
-          Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Rent
-        </h1>
+      {currentUser && (
+  <h1 className='text-xl font-semibold text-slate-700 flex items-center gap-3'>
+    Hi <MdWavingHand className='text-yellow-600'/> {currentUser.username}, see the recent Offer
+  </h1>
+)}
         <hr className='w-48 p-2'/>
         <Link to={`/search?offer=true`} className="btn btn-primary text-xs text-blue-800 font-bold hover:underline">
           View Products now...
