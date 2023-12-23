@@ -91,6 +91,7 @@ const fetchingListings = async () => {
     setError(false);
   } catch (error) {
     setError(true);
+    console.log(error);
     setLoading(false);
   }
 };
